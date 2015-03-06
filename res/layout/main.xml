@@ -3,11 +3,15 @@
               android:orientation="vertical"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
+              android:background="#eeeeee"
         >
+
+    <wayne.mycalendar.CalendarView.BaseCalendar android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"></wayne.mycalendar.CalendarView.BaseCalendar>
     <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Hello World, MyActivity"
+            android:text="@string/description"
             />
 </LinearLayout>
 
