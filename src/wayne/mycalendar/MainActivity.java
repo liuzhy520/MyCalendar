@@ -57,6 +57,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 baseCalendar.refreshCalendar();
+                output_string.setText("");
             }
         });
     }
