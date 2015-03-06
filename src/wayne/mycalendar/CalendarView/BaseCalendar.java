@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import wayne.mycalendar.R;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -76,7 +77,7 @@ public class BaseCalendar extends LinearLayout {
                     calendarView.selectDay = cell.day;
                     calendarView.selectWeek = cell.week;
                     calendarView.updateCalendar();
-                    mDate.setYear(calendarView.getYear());
+                    mDate.setYear(calendarView.getYear() - 1900);
                     mDate.setMonth(calendarView.getMonth());
                     mDate.setDate(cell.getDayOfMonth());
                     SendMessage(GET_ON_SELECTED_DATE, mDate);
@@ -104,11 +105,15 @@ public class BaseCalendar extends LinearLayout {
             }
         });
     }
+
     public void setTitleBarColor(int color){
         SendMessage(SET_TITLE_BAR_COLOR, color);
     }
     public void setToday(){
         calendarView.goToday();
+        mDate.setYear(calendarView.getYear());
+        mDate.setMonth(calendarView.getMonth() - 1900);
+        mDate.setDate(calendarView.mToday.getDayOfMonth());
         tv_month.setText(DateUtils.getMonthString(calendarView.getMonth(), DateUtils.LENGTH_LONG));
     }
     public void refreshCalendar(){
@@ -126,7 +131,9 @@ public class BaseCalendar extends LinearLayout {
         return this.mDate;
     }
     public String getDateString(){
-       return this.mDate.getDate() + "/" +  DateUtils.getMonthString(this.mDate.getMonth(), DateUtils.LENGTH_LONG) + "/" + this.mDate.getYear() ;
+       SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return sdf.format(mDate);
+//       return this.mDate.getDate() + "/" +  DateUtils.getMonthString(this.mDate.getMonth(), DateUtils.LENGTH_LONG) + "/" + this.mDate.getYear() ;
 
     }
     private void SendMessage(int what, Object obj){

@@ -28,7 +28,7 @@ public class CalendarView extends ImageView {
     public final static int DEFAULT_SELECTED_BG_COLOR = Color.parseColor("#fe5c03");
     private int mTextColor, mSelectedBGColor;
     private boolean isSelectedDefault = true;
-    private Cell mToday = null;
+    public Cell mToday = null;
     private Cell[][] mCells = new Cell[6][7];
     protected int selectedDate = 0, selectWeek, selectDay;
     private OnCellTouchListener mOnCellTouchListener = null;

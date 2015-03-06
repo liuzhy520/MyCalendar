@@ -44,6 +44,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 baseCalendar.setToday();
+                output_string.setText(baseCalendar.getDateString());
             }
         });
         getString.setOnClickListener(new View.OnClickListener() {
