@@ -34,7 +34,10 @@ public class BaseCalendar extends LinearLayout {
             switch (msg.what) {
                 case GET_ON_SELECTED_DATE:
                     mDate = (Date) msg.obj;
-                    listener.onResult(mDate);
+                    if(listener != null){
+                        listener.onResult(mDate);
+                    }
+
                     break;
                 case SET_TITLE_BAR_COLOR:
                     int color = Integer.valueOf(msg.obj.toString());
@@ -112,11 +115,11 @@ public class BaseCalendar extends LinearLayout {
         calendarView.clearCalendarSelection();
     }
 
-    public onDateClickListener listener;
-    public interface onDateClickListener {
+    public OnCellClickListener listener = null;
+    public interface OnCellClickListener {
         public void onResult(Date date);
     }
-    public void onDateClickListener(onDateClickListener l) {
+    public void setOnCellClickListener(OnCellClickListener l) {
         listener = l;
     }
     public Date getDate(){
