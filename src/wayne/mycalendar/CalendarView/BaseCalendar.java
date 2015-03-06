@@ -126,7 +126,7 @@ public class BaseCalendar extends LinearLayout {
         return this.mDate;
     }
     public String getDateString(){
-       return this.mDate.getYear() + "年" + DateUtils.getMonthString(this.mDate.getMonth(), DateUtils.LENGTH_LONG) + this.mDate.getDate() + "日";
+       return this.mDate.getDate() + "/" +  DateUtils.getMonthString(this.mDate.getMonth(), DateUtils.LENGTH_LONG) + "/" + this.mDate.getYear() ;
 
     }
     private void SendMessage(int what, Object obj){
