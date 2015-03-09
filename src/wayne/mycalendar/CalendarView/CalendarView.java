@@ -207,7 +207,7 @@ public class CalendarView extends ImageView {
         invalidate();
     }
 
-    public Calendar getDate() {
+    public Calendar getToday() {
         return mRightNow;
     }
 
