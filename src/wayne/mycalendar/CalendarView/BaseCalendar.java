@@ -26,8 +26,10 @@ public class BaseCalendar extends LinearLayout {
     private CalendarView calendarView;
     private TextView tv_month;
     private Date mDate;
+    private Date startValidDate;
     private static final int GET_ON_SELECTED_DATE = 0X00;
     private static final int SET_TITLE_BAR_COLOR = 0X001;
+    private static final int SET_START_VALID_DATE = 0X02;
     //Handler
     private Handler handler = new Handler(){
         @Override
@@ -43,6 +45,10 @@ public class BaseCalendar extends LinearLayout {
                 case SET_TITLE_BAR_COLOR:
                     int color = Integer.valueOf(msg.obj.toString());
                     ll_title_bar.setBackgroundColor(color);
+                    break;
+                case SET_START_VALID_DATE:
+                    startValidDate = (Date) msg.obj;
+                    calendarView.setStartValidDate(startValidDate);
                     break;
                 default:
                     break;
@@ -105,7 +111,9 @@ public class BaseCalendar extends LinearLayout {
             }
         });
     }
-
+    public void setStartValidDate(Date date){
+        SendMessage(SET_START_VALID_DATE, date);
+    }
     public void setTitleBarColor(int color){
         SendMessage(SET_TITLE_BAR_COLOR, color);
     }

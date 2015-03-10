@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.widget.ImageView;
 
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by Wayne on 2015/3/3.
@@ -31,6 +32,7 @@ public class CalendarView extends ImageView {
     public Cell mToday = null;
     private Cell[][] mCells = new Cell[6][7];
     protected int selectedDate = 0, selectWeek, selectDay;
+    private Date StartValidDate;
     private OnCellTouchListener mOnCellTouchListener = null;
     MonthDisplayHelper mHelper;
 
@@ -72,12 +74,14 @@ public class CalendarView extends ImageView {
         class _calendar {
             public int day;
             public boolean thisMonth;
-            public _calendar(int d, boolean b) {
+            public boolean isValid;
+            public _calendar(int d, boolean b, boolean valid) {
                 day = d;
                 thisMonth = b;
+                isValid = valid;
             }
             public _calendar(int d) {
-                this(d, false);
+                this(d, false,false);
             }
         };
         _calendar tmp[][] = new _calendar[6][7];
@@ -85,8 +89,18 @@ public class CalendarView extends ImageView {
         for(int i=0; i<tmp.length; i++) {
             int n[] = mHelper.getDigitsForRow(i);
             for(int d=0; d<n.length; d++) {
-                if(mHelper.isWithinCurrentMonth(i,d))
-                    tmp[i][d] = new _calendar(n[d], true);
+                if (mHelper.isWithinCurrentMonth(i, d))
+                    if (StartValidDate != null) {
+                        if (mHelper.getYear() - 1900 == StartValidDate.getYear() && mHelper.getMonth() == StartValidDate.getMonth() && mHelper.getDayAt(i, d) >= StartValidDate.getDate()) {
+                            tmp[i][d] = new _calendar(n[d], true, true);
+                        } else if (mHelper.getYear() - 1900 == StartValidDate.getYear() && mHelper.getMonth() > StartValidDate.getMonth()) {
+                            tmp[i][d] = new _calendar(n[d], true, true);
+                        } else if (mHelper.getYear() - 1900 > StartValidDate.getYear()) {
+                            tmp[i][d] = new _calendar(n[d], true, true);
+                        } else
+                            tmp[i][d] = new _calendar(n[d], true, false);
+                    } else
+                        tmp[i][d] = new _calendar(n[d], true, true);
                 else
                     tmp[i][d] = new _calendar(n[d]);
             }
@@ -102,7 +116,7 @@ public class CalendarView extends ImageView {
         Rect Bound = new Rect(CELL_MARGIN_LEFT, CELL_MARGIN_TOP, CELL_WIDTH+CELL_MARGIN_LEFT, CELL_HEIGH+CELL_MARGIN_TOP);
         for(int week=0; week<mCells.length; week++) {
             for(int day=0; day<mCells[week].length; day++) {
-                if(tmp[week][day].thisMonth) {
+                if(tmp[week][day].thisMonth && tmp[week][day].isValid) {
 
                     if(day==0 || day==6 ){
                         mCells[week][day] = new RedCell(tmp[week][day].day, new Rect(Bound), CELL_TEXT_SIZE, this.ScreenWidth);
@@ -142,7 +156,9 @@ public class CalendarView extends ImageView {
             Bound.right = CELL_MARGIN_LEFT+CELL_WIDTH;
         }
     }
-
+    public void setStartValidDate(Date date){
+        this.StartValidDate = date;
+    }
     @Override
     public void onLayout(boolean changed, int left, int top, int right, int bottom) {
         initCells();

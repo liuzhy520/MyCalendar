@@ -33,6 +33,9 @@ public class MainActivity extends Activity {
 
     }
     private void setViews(){
+        Date d = new Date();
+        baseCalendar.setStartValidDate(d);
+        baseCalendar.refreshCalendar();
         baseCalendar.setOnCellClickListener(new BaseCalendar.OnCellClickListener() {
             @Override
             public void onResult(Date date) {
