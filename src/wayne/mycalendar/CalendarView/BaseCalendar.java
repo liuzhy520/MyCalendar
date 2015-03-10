@@ -5,9 +5,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.format.DateUtils;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -110,6 +108,77 @@ public class BaseCalendar extends LinearLayout {
                 tv_month.setText(DateUtils.getMonthString(calendarView.getMonth(), DateUtils.LENGTH_LONG));
             }
         });
+        /** swipe calender **/
+        final GestureDetector gestureDetector = new GestureDetector(context, new GestureDetector.OnGestureListener() {
+            private static final int SWIPE_THRESHOLD = 100;
+            private static final int SWIPE_VELOCITY_THRESHOLD = 100;
+            @Override
+            public boolean onDown(MotionEvent motionEvent) {
+                return false;
+            }
+
+            @Override
+            public void onShowPress(MotionEvent motionEvent) {
+
+            }
+
+            @Override
+            public boolean onSingleTapUp(MotionEvent motionEvent) {
+                return false;
+            }
+
+            @Override
+            public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+
+                return false;
+
+            }
+
+            @Override
+            public void onLongPress(MotionEvent motionEvent) {
+
+            }
+
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+
+                /** from right to left **/
+                if (e1.getX() - e2.getX() > SWIPE_THRESHOLD
+                        && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                    onSwipeLeft();
+                }
+                /** from left to right **/
+                if (e2.getX() - e1.getX() > SWIPE_THRESHOLD
+                        && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                    onSwipeRight();
+                }
+                return false;
+            }
+            public void onSwipeRight() {
+                calendarView.previousMonth();
+                if(startValidDate != null){
+                    calendarView.setStartValidDate(startValidDate);
+                }
+                tv_month.setText(DateUtils.getMonthString(calendarView.getMonth(), DateUtils.LENGTH_LONG));
+            }
+
+            public void onSwipeLeft() {
+                calendarView.nextMonth();
+                if(startValidDate != null){
+                    calendarView.setStartValidDate(startValidDate);
+                }
+                tv_month.setText(DateUtils.getMonthString(calendarView.getMonth(), DateUtils.LENGTH_LONG));
+            }
+        });
+        setLongClickable(true);
+        setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return gestureDetector.onTouchEvent(motionEvent);
+
+            }
+        });
+        /** swipe calender end **/
     }
     public void setStartValidDate(Date date){
         SendMessage(SET_START_VALID_DATE, date);
